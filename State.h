@@ -2,6 +2,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
+#include <utility>
 //#include "NineState_new.h"
 
 //节点类的基类. 在解决不同问题的时候, 继承并修改它, 以处理不同的状态空间和算符
@@ -31,8 +32,8 @@ protected:
 	Code code;//唯一标识符
 
 public:
-	State(C* p = NULL) :parent(p), num(0) {}
-	virtual bool generate(std::vector<C*>& M, std::map<Code, C>& G) = 0;
+	State(C* p = NULL) :parent(p), num(0), code(0) {}
+	virtual bool generate(std::vector<std::pair<C*,bool> >& M, std::map<Code, C>& G) = 0;
 	void setNum(unsigned long long int n){
 		num = n;
 	}

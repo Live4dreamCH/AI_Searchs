@@ -36,21 +36,46 @@ public:
         this->x = x;
         this->y = y;
         this->code = 0;
+        //std::cout << "构造了\n";
+        //this->print();
     };
+
+
+    NineState_new(const NineState_new& ano) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                Nine[i][j] = ano.Nine[i][j];
+            }
+        }
+        this->x = ano.x;
+        this->y = ano.y;
+        this->code = ano.code;
+        this->parent = ano.parent;
+        //std::cout << "拷贝构造了\n";
+        //this->print();
+    }
+
     //void test() {
     //    State* s = this->parent;
     //    NineState_new* ns = this;
     //    s = ns;
     //}
 
+    ~NineState_new()
+    {
+        //std::cout << "析构了\n";
+        //this->print();
+    }
+
     //扩展当前Sn节点, 内容不是祖先的进入下一步(S::generate, S::isAncestor)
-    //如果不在G中,new一个, 改Sn的child,加M,加G,del堆上的(S::<)
-    //如果在, 改Sn的child, 加M
+    //如果不在G中,new一个, 改Sn的child,加M,加G,del堆上的(S::<),M中设为false
+    //如果在, 改Sn的child, 加M, M中设为true
     //有(非祖先的)子节点时, 返回true
-    bool generate(std::vector<NineState_new*>& M, std::map<unsigned int, NineState_new>& G) {
+    bool generate(std::vector<std::pair<NineState_new*, bool> >& M, std::map<unsigned int, NineState_new>& G) {
         short int temp[3][3];
         bool succ = false;
-        NineState_new *son = NULL, *t = NULL;
+        NineState_new *son = NULL;
+        std::pair<NineState_new*, bool> p2M;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 temp[i][j] = Nine[i][j];
@@ -64,15 +89,16 @@ public:
                 if (!isAncestor(temp)) {
                     son = new NineState_new(temp, x - 1, y, this);
                     auto it = G.find(son->getCode());
-                    if (it == G.end()) {
-                        t = &(G.insert_or_assign(son->getCode(), son).first->second);
+                    p2M.second = !(it == G.end());
+                    if (!p2M.second) {
+                        p2M.first = &(G.insert_or_assign(son->getCode(), *son).first->second);
                         delete son;
                     }
                     else {
-                        t = &(it->second);
+                        p2M.first = &(it->second);
                     }
-                    this->children.push_back(t);
-                    M.push_back(t);
+                    this->children.push_back(p2M.first);
+                    M.push_back(p2M);
                     succ = true;
                 }
 
@@ -86,15 +112,16 @@ public:
                 if (!isAncestor(temp)) {
                     son = new NineState_new(temp, x + 1, y, this);
                     auto it = G.find(son->getCode());
-                    if (it == G.end()) {
-                        t = &(G.insert_or_assign(son->getCode(), son).first->second);
+                    p2M.second = !(it == G.end());
+                    if (!p2M.second) {
+                        p2M.first = &(G.insert_or_assign(son->getCode(), *son).first->second);
                         delete son;
                     }
                     else {
-                        t = &(it->second);
+                        p2M.first = &(it->second);
                     }
-                    this->children.push_back(t);
-                    M.push_back(t);
+                    this->children.push_back(p2M.first);
+                    M.push_back(p2M);
                     succ = true;
                 }
 
@@ -108,15 +135,16 @@ public:
                 if (!isAncestor(temp)) {
                     son = new NineState_new(temp, x, y - 1, this);
                     auto it = G.find(son->getCode());
-                    if (it == G.end()) {
-                        t = &(G.insert_or_assign(son->getCode(), son).first->second);
+                    p2M.second = !(it == G.end());
+                    if (!p2M.second) {
+                        p2M.first = &(G.insert_or_assign(son->getCode(), *son).first->second);
                         delete son;
                     }
                     else {
-                        t = &(it->second);
+                        p2M.first = &(it->second);
                     }
-                    this->children.push_back(t);
-                    M.push_back(t);
+                    this->children.push_back(p2M.first);
+                    M.push_back(p2M);
                     succ = true;
                 }
 
@@ -130,15 +158,16 @@ public:
                 if (!isAncestor(temp)) {
                     son = new NineState_new(temp, x, y + 1, this);
                     auto it = G.find(son->getCode());
-                    if (it == G.end()) {
-                        t = &(G.insert_or_assign(son->getCode(), son).first->second);
+                    p2M.second = !(it == G.end());
+                    if (!p2M.second) {
+                        p2M.first = &(G.insert_or_assign(son->getCode(), *son).first->second);
                         delete son;
                     }
                     else {
-                        t = &(it->second);
+                        p2M.first = &(it->second);
                     }
-                    this->children.push_back(t);
-                    M.push_back(t);
+                    this->children.push_back(p2M.first);
+                    M.push_back(p2M);
                     succ = true;
                 }
 
@@ -154,12 +183,13 @@ public:
         if (code != 0)
             return code;
         unsigned int ten = 1;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 2; i >= 0; i--) {
+            for (int j = 2; j >= 0; j--) {
                 code += Nine[i][j] * ten;
                 ten *= 10;
             }
         }
+        return code;
     }
 
     bool operator <(NineState_new ano) {

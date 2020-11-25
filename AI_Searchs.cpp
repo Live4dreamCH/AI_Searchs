@@ -34,13 +34,16 @@ int main()
     //std::map<int, bool>::iterator sn = o.front();
     //sn->second = true;
 
-    short int s0[3][3] = { {2,8,3}, {1,0,4}, {7,6,5} }, se[3][3] = { {1,2,3}, {8,0,4}, {7,6,5} };
+    short int s0[3][3] = { {1,2,3}, {4,0,8}, {7,6,5} }, se[3][3] = { {1,2,3}, {8,0,4}, {7,6,5} };
     int x0 = 1, y0 = 1, xe = 1, ye = 1;
     NineState_new start(s0, x0, y0, NULL), target(se, xe, ye);
     BFsearch<NineState_new, unsigned int> bfs(start, target);
 
+    std::cout << "从:\n";
     start.print();
+    std::cout << "到:\n";
     target.print();
+    std::cout << "开始搜索:\n";
 
     std::stack<NineState_new*> result;
     if (bfs.search(result)) {
@@ -52,7 +55,7 @@ int main()
         }
     }
     else {
-        std::cout << "无解!,状态数:" << bfs.getN();
+        std::cout << "无解! 可达状态数:" << bfs.getN();
     }
 	return 0;
 }

@@ -2,6 +2,7 @@
 #include <map>
 #include <vector>
 #include <stack>
+#include <utility>
 
 //#include "NineState_new.h"
 
@@ -16,7 +17,7 @@ protected:
 	unsigned long long int n;//被扩展过的节点数目
 	S start, target;
 	S* Sn;//起始节点, 目标节点, 当前节点
-	std::vector<S*> M;//扩展得到的子节点
+	std::vector<std::pair<S*, bool>> M;//扩展得到的子节点
 
 	//把open中的第一个节点从open转移到close, 
 	//并赋编号为n, (S::setNum)
