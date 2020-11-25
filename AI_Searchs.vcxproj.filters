@@ -29,9 +29,6 @@
     <ClInclude Include="State.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="NineState.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="NineState_new.h">
       <Filter>头文件</Filter>
     </ClInclude>

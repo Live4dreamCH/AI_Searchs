@@ -32,8 +32,10 @@ protected:
 	Code code;//Î¨Ò»±êÊ¶·û
 
 public:
-	State(C* p = NULL) :parent(p), num(0), code(0) {}
-	virtual bool generate(std::vector<std::pair<C*,bool> >& M, std::map<Code, C>& G) = 0;
+	State(C* p = NULL) :num(0), code(0) {
+		this->setParent(p);
+	}
+	virtual bool generate(std::vector<std::pair<C*,bool> >& M, std::map<Code, C>& G, C* target) = 0;
 	void setNum(unsigned long long int n){
 		num = n;
 	}

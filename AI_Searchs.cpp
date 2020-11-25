@@ -36,7 +36,8 @@ int main()
 
     short int s0[3][3] = { {1,2,3}, {4,0,8}, {7,6,5} }, se[3][3] = { {1,2,3}, {8,0,4}, {7,6,5} };
     int x0 = 1, y0 = 1, xe = 1, ye = 1;
-    NineState_new start(s0, x0, y0, NULL), target(se, xe, ye);
+    NineState_new target(se, xe, ye);
+    NineState_new start(s0, x0, y0, NULL, &target);
     BFsearch<NineState_new, unsigned int> bfs(start, target);
 
     std::cout << "从:\n";
