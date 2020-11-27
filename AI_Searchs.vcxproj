@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI_Searchs.cpp" />
+    <ClCompile Include="AStarSearch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BFsearch.h" />

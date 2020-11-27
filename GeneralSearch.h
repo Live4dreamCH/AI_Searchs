@@ -31,7 +31,7 @@ protected:
 	//有(非祖先的)子节点时, 返回true
 	virtual bool generate() = 0;
 	//处理M
-	virtual void changeM() = 0;
+	virtual bool changeM() = 0;
 	//对open表排序
 	virtual void sortOpen() = 0;
 

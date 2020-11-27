@@ -6,11 +6,17 @@
 //#include <vector>
 //#include <map>
 //#include <queue>
+//#include <algorithm>
 
 #include "BFsearch.h"
+#include "AStarSearch.cpp"
 #include "NineState_new.h"
 #include <stack>
 
+
+//bool cmp(const int& a,const int& b){
+//    return a > b;
+//}
 
 int main()
 {
@@ -34,30 +40,60 @@ int main()
     //std::map<int, bool>::iterator sn = o.front();
     //sn->second = true;
 
-    short int s0[3][3] = { {1,2,3}, {4,0,8}, {7,6,5} }, se[3][3] = { {1,2,3}, {8,0,4}, {7,6,5} };
-    int x0 = 1, y0 = 1, xe = 1, ye = 1;
+    //std::vector<int> test = { 3,7,11,2,4,1 };
+    //std::make_heap(test.begin(), test.end(), cmp);
+
+    short int s0[3][3] = { {1,2,3}, {8,0,4}, {7,6,5} }, se[3][3] = { {0,5,7}, {6,2,8}, {3,4,1} };
+    int x0 = 1, y0 = 1, xe = 0, ye = 0;
     NineState_new target(se, xe, ye);
     NineState_new start(s0, x0, y0, NULL, &target);
-    BFsearch<NineState_new, unsigned int> bfs(start, target);
 
-    std::cout << "从:\n";
-    start.print();
-    std::cout << "到:\n";
-    target.print();
-    std::cout << "开始搜索:\n";
+    {
+        BFsearch<NineState_new, unsigned int> bfs(start, target);
 
-    std::stack<NineState_new*> result;
-    if (bfs.search(result)) {
-        std::cout << "扩展次数:"<< bfs.getN() <<"答案是\n";
-        while (!result.empty())
-        {
-            result.top()->print();
-            result.pop();
+        std::cout << "从:\n";
+        start.print();
+        std::cout << "到:\n";
+        target.print();
+        std::cout << "DFS开始搜索:\n";
+
+        std::stack<NineState_new*> result;
+        if (bfs.search(result)) {
+            std::cout << "扩展次数:" << bfs.getN() << "\n答案是\n";
+            while (!result.empty())
+            {
+                result.top()->print();
+                result.pop();
+            }
+        }
+        else {
+            std::cout << "无解! 可达状态数:" << bfs.getN();
         }
     }
-    else {
-        std::cout << "无解! 可达状态数:" << bfs.getN();
+
+    {
+        AStarSearch<NineState_new, unsigned int, unsigned long long int> ass(start, target);
+
+        std::cout << "\n\n\n从:\n";
+        start.print();
+        std::cout << "到:\n";
+        target.print();
+        std::cout << "A*开始搜索:\n";
+
+        std::stack<NineState_new*> result2;
+        if (ass.search(result2)) {
+            std::cout << "扩展次数:" << ass.getN() << "\n答案是\n";
+            while (!result2.empty())
+            {
+                result2.top()->print();
+                result2.pop();
+            }
+        }
+        else {
+            std::cout << "无解! 可达状态数:" << ass.getN();
+        }
     }
+
 	return 0;
 }
 
