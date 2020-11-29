@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include <string>
 
 //#include <vector>
 //#include <map>
@@ -45,13 +46,42 @@ int main()
 
     short int s0[3][3] = { {1,2,3}, {8,0,4}, {7,6,5} }, se[3][3] = { {0,5,7}, {6,2,8}, {3,4,1} };
     int x0 = 1, y0 = 1, xe = 0, ye = 0;
+
+    std::string re;
+    std::cout << "是否需要输入起止格局? (y:输入, N:不输入, 采用默认值)\n";
+    std::cin >> re;
+    if (re == "y" || re == "Y") {
+        std::cout << "请输入起始格局:(空格以0代替)\n";
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                std::cin >> s0[i][j];
+                if (s0[i][j] == 0) {
+                    x0 = i;
+                    y0 = j;
+                }
+            }
+        }
+        std::cout << "请输入目标格局:(空格以0代替)\n";
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                std::cin >> se[i][j];
+                if (se[i][j] == 0) {
+                    xe = i;
+                    ye = j;
+                }
+            }
+        }
+    }
+
     NineState_new target(se, xe, ye);
     NineState_new start(s0, x0, y0, NULL, &target);
 
-    {
+    std::cout << "\n是否使用DFS?(y/N): ";
+    std::cin >> re;
+    if (re == "y" || re == "Y") {
         BFsearch<NineState_new, unsigned int> bfs(start, target);
 
-        std::cout << "从:\n";
+        std::cout << "\n从:\n";
         start.print();
         std::cout << "到:\n";
         target.print();
@@ -59,22 +89,26 @@ int main()
 
         std::stack<NineState_new*> result;
         if (bfs.search(result)) {
-            std::cout << "扩展次数:" << bfs.getN() << "\n答案是\n";
+            int temp = result.size()-1;
+            std::cout << "搜索成功!具体路径为:\n";
             while (!result.empty())
             {
                 result.top()->print();
                 result.pop();
             }
+            std::cout << "扩展次数:" << bfs.getN() << "\n路径长度:" << temp << "\n\n";
         }
         else {
-            std::cout << "无解! 可达状态数:" << bfs.getN();
+            std::cout << "无解! 可达状态数:" << bfs.getN()<<"\n\n";
         }
     }
 
-    {
+    std::cout << "\n是否使用A*?(y/N): ";
+    std::cin >> re;
+    if (re == "y" || re == "Y") {
         AStarSearch<NineState_new, unsigned int, unsigned long long int> ass(start, target);
 
-        std::cout << "\n\n\n从:\n";
+        std::cout << "\n从:\n";
         start.print();
         std::cout << "到:\n";
         target.print();
@@ -82,15 +116,17 @@ int main()
 
         std::stack<NineState_new*> result2;
         if (ass.search(result2)) {
-            std::cout << "扩展次数:" << ass.getN() << "\n答案是\n";
+            int temp = result2.size()-1;
+            std::cout << "搜索成功!具体路径为:\n";
             while (!result2.empty())
             {
                 result2.top()->print();
                 result2.pop();
             }
+            std::cout << "扩展次数:" << ass.getN() << "\n路径长度:" << temp << "\n\n";
         }
         else {
-            std::cout << "无解! 可达状态数:" << ass.getN();
+            std::cout << "无解! 可达状态数:" << ass.getN()<<"\n\n";
         }
     }
 
